@@ -24,6 +24,9 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "role", nullable = false)
+    private String role = "USER";
+
     @Column(name = "age", nullable = false)
     private Integer age;
 
@@ -49,14 +52,16 @@ public class User {
     public User() {
     }
 
-    public User(UUID id, String name, String email, String passwordHash,
-                Integer age, Double weight, Double height, FitnessLevel fitnessLevel,
+    public User(UUID id, String name, String email,
+                String passwordHash, String role, Integer age,
+                Double weight, Double height, FitnessLevel fitnessLevel,
                 List<String> goals, List<WorkoutLog> workoutLogs,
                 List<ProgressReport> progressReports) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.role = role;
         this.age = age;
         this.weight = weight;
         this.height = height;
@@ -96,6 +101,14 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Integer getAge() {
@@ -162,6 +175,7 @@ public class User {
                 Objects.equals(name, user.name) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(passwordHash, user.passwordHash) &&
+                Objects.equals(role, user.role) &&
                 Objects.equals(age, user.age) &&
                 Objects.equals(weight, user.weight) &&
                 Objects.equals(height, user.height) &&
@@ -173,7 +187,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, passwordHash, age,
+        return Objects.hash(id, name, email, passwordHash, role, age,
                 weight, height, fitnessLevel, goals, workoutLogs, progressReports);
     }
 
@@ -184,6 +198,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
+                ", role='" + role + '\'' +
                 ", age=" + age +
                 ", weight=" + weight +
                 ", height=" + height +
