@@ -204,8 +204,6 @@ public class User {
                 ", height=" + height +
                 ", fitnessLevel=" + fitnessLevel +
                 ", goals=" + goals +
-                ", workoutLogs=" + workoutLogs +
-                ", progressReports=" + progressReports +
                 '}';
     }
 }

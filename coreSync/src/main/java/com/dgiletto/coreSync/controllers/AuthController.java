@@ -1,5 +1,6 @@
 package com.dgiletto.coreSync.controllers;
 
+import com.dgiletto.coreSync.domain.dto.LoginRequest;
 import com.dgiletto.coreSync.domain.entities.User;
 import com.dgiletto.coreSync.repositories.UserRepository;
 import com.dgiletto.coreSync.util.JwtUtil;
@@ -34,15 +35,16 @@ public class AuthController {
         }
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("User registered successfully");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        User user = userRepository.findByEmail(request.get("email"))
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!passwordEncoder.matches(request.get("password"), user.getPasswordHash())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
