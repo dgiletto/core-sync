@@ -6,6 +6,6 @@ import com.dgiletto.coreSync.domain.entities.Exercise;
 import com.dgiletto.coreSync.domain.entities.WorkoutLog;
 
 public interface ExerciseMapper {
-    Exercise toEntity(ExerciseRequest dto, WorkoutLog log);
+    Exercise toEntity(ExerciseRequest dto);
     ExerciseResponse toResponse(Exercise exercise);
 }

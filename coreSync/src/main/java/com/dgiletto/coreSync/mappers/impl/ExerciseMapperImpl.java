@@ -13,12 +13,11 @@ public class ExerciseMapperImpl implements ExerciseMapper {
 
     // Request DTO -> Entity
     @Override
-    public Exercise toEntity(ExerciseRequest dto, WorkoutLog log) {
+    public Exercise toEntity(ExerciseRequest dto) {
         Exercise ex = new Exercise();
         ex.setName(dto.name());
         ex.setExerciseType(dto.exerciseType());
         ex.setDifficulty(dto.difficulty());
-        ex.setWorkoutLog(log);
 
         if (dto.exerciseType() == ExerciseType.STRENGTH) {
             ex.setMuscleGroup(dto.muscleGroup());

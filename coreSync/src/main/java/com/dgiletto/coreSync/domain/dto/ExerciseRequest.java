@@ -3,6 +3,8 @@ package com.dgiletto.coreSync.domain.dto;
 import com.dgiletto.coreSync.domain.entities.ExerciseDifficulty;
 import com.dgiletto.coreSync.domain.entities.ExerciseType;
 
+import java.util.UUID;
+
 public record ExerciseRequest(
         String name,
         ExerciseType exerciseType,
@@ -12,6 +14,8 @@ public record ExerciseRequest(
         Integer reps,
         Double weight,
         Double duration,
-        Double distance
+        Double distance,
+        UUID userId,
+        UUID workoutLogId
 ) {
 }
