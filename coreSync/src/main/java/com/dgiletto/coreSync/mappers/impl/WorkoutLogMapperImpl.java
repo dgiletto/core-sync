@@ -14,12 +14,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class WorkoutLogMapperImpl implements WorkoutLogMapper{
-    private final ExerciseMapper exerciseMapper;
-
-    public WorkoutLogMapperImpl(ExerciseMapper exerciseMapper) {
-        this.exerciseMapper = exerciseMapper;
-    }
-
 
     // Request DTO -> Entity
     @Override
@@ -33,16 +27,11 @@ public class WorkoutLogMapperImpl implements WorkoutLogMapper{
     // Entity -> Response DTO
     @Override
     public WorkoutLogResponse toResponse(WorkoutLog log) {
-        List<ExerciseResponse> exerciseResponses = log.getExercises().stream()
-                .map(exerciseMapper::toResponse)
-                .collect(Collectors.toList());
-
         return new WorkoutLogResponse(
                 log.getId(),
                 log.getName(),
                 log.getDate(),
-                log.getUser().getId(),
-                exerciseResponses
+                log.getUser().getId()
         );
     }
 }

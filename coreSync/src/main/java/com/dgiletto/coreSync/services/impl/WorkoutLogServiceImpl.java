@@ -8,9 +8,12 @@ import com.dgiletto.coreSync.mappers.WorkoutLogMapper;
 import com.dgiletto.coreSync.repositories.UserRepository;
 import com.dgiletto.coreSync.repositories.WorkoutRepository;
 import com.dgiletto.coreSync.services.WorkoutLogService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,6 +36,7 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
         this.exerciseMapper = exerciseMapper;
     }
 
+    @Transactional
     @Override
     public WorkoutLogResponse createWorkoutLog(WorkoutLogRequest request) {
         var user = userRepository.findById(request.userId())
@@ -40,11 +44,6 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
 
         var workoutLog = workoutLogMapper.toEntity(request);
         workoutLog.setUser(user);
-
-        var exercises = request.exercises().stream()
-                .map(er -> exerciseMapper.toEntity(er, workoutLog))
-                .toList();
-        workoutLog.setExercises(exercises);
 
         var saved = workoutRepository.save(workoutLog);
         return workoutLogMapper.toResponse(saved);
@@ -56,5 +55,29 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
         return logs.stream()
                 .map(workoutLogMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public WorkoutLogResponse getWorkoutLog(UUID userId, UUID workoutLogId) {
+        var log = workoutRepository.findByIdAndUserId(workoutLogId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Workout log not found for this user"));
+        return workoutLogMapper.toResponse(log);
+    }
+
+    @Transactional
+    @Override
+    public WorkoutLogResponse updateWorkoutLog(UUID userId, UUID workoutLogId, WorkoutLogRequest request) {
+        var workoutLog = workoutRepository.findByIdAndUserId(workoutLogId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Workout log not found for this user"));
+        workoutLog.setName(request.name());
+        workoutLog.setDate(request.date());
+        var updated = workoutRepository.save(workoutLog);
+        return workoutLogMapper.toResponse(updated);
+    }
+
+    @Transactional
+    @Override
+    public void deleteWorkoutLog(UUID userId, UUID workoutLogId) {
+        workoutRepository.deleteByIdAndUserId(workoutLogId, userId);
     }
 }

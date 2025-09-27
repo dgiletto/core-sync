@@ -7,7 +7,6 @@ import java.util.UUID;
 public record WorkoutLogRequest(
         String name,
         LocalDate date,
-        UUID userId,
-        List<ExerciseRequest> exercises
+        UUID userId
 ) {
 }

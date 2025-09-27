@@ -32,4 +32,33 @@ public class WorkoutLogController {
         List<WorkoutLogResponse> workouts = workoutLogService.getWorkoutsByUser(userId);
         return ResponseEntity.ok(workouts);
     }
+
+    // GET /api/workout/{user_id}/{workout_log_id}
+    @GetMapping("/{user_id}/{workout_log_id}")
+    public ResponseEntity<WorkoutLogResponse> getWorkoutLogById(
+            @PathVariable("user_id") UUID userId,
+            @PathVariable("workout_log_id") UUID workoutLogId
+    ) {
+        return ResponseEntity.ok(workoutLogService.getWorkoutLog(userId, workoutLogId));
+    }
+
+    // PUT /api/workout/{user_id}/{workout_log_id}
+    @PutMapping("/{user_id}/{workout_log_id}")
+    public ResponseEntity<WorkoutLogResponse> updateWorkoutLog(
+            @PathVariable("user_id") UUID userId,
+            @PathVariable("workout_log_id") UUID workoutLogId,
+            @RequestBody WorkoutLogRequest request
+    ) {
+        return ResponseEntity.ok(workoutLogService.updateWorkoutLog(userId, workoutLogId, request));
+    }
+
+    // DELETE /api/workout/{user_id}/{workout_log_id}
+    @DeleteMapping("/{user_id}/{workout_log_id}")
+    public ResponseEntity<Void> deleteWorkoutLog(
+            @PathVariable("user_id") UUID userId,
+            @PathVariable("workout_log_id") UUID workoutLogId
+    ) {
+        workoutLogService.deleteWorkoutLog(userId, workoutLogId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -8,7 +8,6 @@ public record WorkoutLogResponse(
         UUID id,
         String name,
         LocalDate date,
-        UUID userId,
-        List<ExerciseResponse> exercises
+        UUID userId
 ) {
 }
