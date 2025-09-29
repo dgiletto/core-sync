@@ -31,7 +31,7 @@ public class WorkoutLogControllerTest {
 
     @BeforeEach
     void setup() throws Exception{
-        // login to JWT token
+        // login to get JWT
         MvcResult loginResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"email\":\"john@example.com\",\"password\":\"password123\"}"))

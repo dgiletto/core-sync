@@ -21,7 +21,7 @@ public class ExerciseController {
     }
 
     // POST /api/exercise/{workout_log_id}
-    @PostMapping("/api/exercise/{workout_log_id")
+    @PostMapping("{workout_log_id}")
     public ResponseEntity<ExerciseResponse> createExercise(
             @PathVariable("workout_log_id") UUID workoutLogId,
             @RequestBody ExerciseRequest request
@@ -31,7 +31,7 @@ public class ExerciseController {
     }
 
     // GET /api/exercise/{workout_log_id}
-    @GetMapping("/api/exercise/{workout_log_id}")
+    @GetMapping("{workout_log_id}")
     public ResponseEntity<List<ExerciseResponse>> listExercises(
             @PathVariable("workout_log_id") UUID workoutLogId
     ) {
@@ -40,6 +40,7 @@ public class ExerciseController {
     }
 
     // GET /api/exercise/{workout_log_id}/{exercise_id}
+    @GetMapping("/{workout_log_id}/{exercise_id}")
     public ResponseEntity<ExerciseResponse> getExerciseById(
             @PathVariable("exercise_id") UUID exerciseId,
             @PathVariable("workout_log_id") UUID workoutLogId
@@ -48,6 +49,7 @@ public class ExerciseController {
     }
 
     // PUT /api/exercise/{workout_log_id}/{exercise_id}
+    @PutMapping("/{workout_log_id}/{exercise_id}")
     public ResponseEntity<ExerciseResponse> updateExercise(
             @PathVariable("exercise_id") UUID exerciseId,
             @PathVariable("workout_log_id") UUID workoutLogId,
@@ -57,6 +59,7 @@ public class ExerciseController {
     }
 
     // DELETE /api/exercise/{workout_log_id}/{exercise_id}
+    @DeleteMapping("/{workout_log_id}/{exercise_id}")
     public ResponseEntity<Void> deleteExercise(
             @PathVariable("exercise_id") UUID exerciseId,
             @PathVariable("workout_log_id") UUID workoutLogId

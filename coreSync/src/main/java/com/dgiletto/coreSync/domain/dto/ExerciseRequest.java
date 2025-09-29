@@ -14,8 +14,6 @@ public record ExerciseRequest(
         Integer reps,
         Double weight,
         Double duration,
-        Double distance,
-        UUID userId,
-        UUID workoutLogId
+        Double distance
 ) {
 }

@@ -22,18 +22,15 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
     private final WorkoutRepository workoutRepository;
     private final UserRepository userRepository;
     private final WorkoutLogMapper workoutLogMapper;
-    private final ExerciseMapper exerciseMapper;
 
     public WorkoutLogServiceImpl(
             WorkoutRepository workoutRepository,
             UserRepository userRepository,
-            WorkoutLogMapper workoutLogMapper,
-            ExerciseMapper exerciseMapper
+            WorkoutLogMapper workoutLogMapper
     ) {
         this.workoutRepository = workoutRepository;
         this.userRepository = userRepository;
         this.workoutLogMapper = workoutLogMapper;
-        this.exerciseMapper = exerciseMapper;
     }
 
     @Transactional
