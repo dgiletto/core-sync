@@ -68,6 +68,7 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
                 .orElseThrow(() -> new IllegalArgumentException("Workout log not found for this user"));
         workoutLog.setName(request.name());
         workoutLog.setDate(request.date());
+        workoutLog.setWeight(request.weight());
         var updated = workoutRepository.save(workoutLog);
         return workoutLogMapper.toResponse(updated);
     }

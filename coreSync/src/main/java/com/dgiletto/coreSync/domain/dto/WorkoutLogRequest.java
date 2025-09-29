@@ -7,6 +7,7 @@ import java.util.UUID;
 public record WorkoutLogRequest(
         String name,
         LocalDate date,
+        Double weight,
         UUID userId
 ) {
 }

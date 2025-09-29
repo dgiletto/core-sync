@@ -21,6 +21,7 @@ public class WorkoutLogMapperImpl implements WorkoutLogMapper{
         WorkoutLog log = new WorkoutLog();
         log.setName(dto.name());
         log.setDate(dto.date());
+        log.setWeight(dto.weight());
         return log;
     }
 
@@ -31,6 +32,7 @@ public class WorkoutLogMapperImpl implements WorkoutLogMapper{
                 log.getId(),
                 log.getName(),
                 log.getDate(),
+                log.getWeight(),
                 log.getUser().getId()
         );
     }

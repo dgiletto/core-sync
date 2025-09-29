@@ -51,6 +51,7 @@ public class WorkoutLogControllerTest {
                 {
                     "name": "Workout 1",
                     "date": "2025-09-27",
+                    "weight": 140,
                     "userId": "%s"
                 }
                 """.formatted(userId);
@@ -61,6 +62,7 @@ public class WorkoutLogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(userId.toString()))
                 .andExpect(jsonPath("$.name").value("Workout 1"))
+                .andExpect(jsonPath("$.weight").value(140))
                 .andExpect(jsonPath("$.date").value("2025-09-27"));
     }
 
@@ -79,6 +81,7 @@ public class WorkoutLogControllerTest {
                 {
                     "name": "Workout 1",
                     "date": "2025-09-27",
+                    "weight": 140,
                     "userId": "%s"
                 }
                 """.formatted(userId);
@@ -98,6 +101,7 @@ public class WorkoutLogControllerTest {
                 .andExpect(jsonPath("$.id").value(logId))
                 .andExpect(jsonPath("$.name").value("Workout 1"))
                 .andExpect(jsonPath("$.date").value("2025-09-27"))
+                .andExpect(jsonPath("$.weight").value(140))
                 .andExpect(jsonPath("$.userId").value(userId.toString()));
     }
 
@@ -108,6 +112,7 @@ public class WorkoutLogControllerTest {
                 {
                     "name": "Workout 1",
                     "date": "2025-09-27",
+                    "weight": 135,
                     "userId": "%s"
                 }
                 """.formatted(userId);
@@ -125,6 +130,7 @@ public class WorkoutLogControllerTest {
                 {
                     "name": "Workout 2",
                     "date": "2025-09-25",
+                    "weight": 140,
                     "userId": "%s"
                 }
                 """.formatted(userId);
@@ -136,6 +142,7 @@ public class WorkoutLogControllerTest {
                 .andExpect(jsonPath("$.id").value(logId))
                 .andExpect(jsonPath("$.name").value("Workout 2"))
                 .andExpect(jsonPath("$.date").value("2025-09-25"))
+                .andExpect(jsonPath("$.weight").value(140))
                 .andExpect(jsonPath("$.userId").value(userId.toString()));
     }
 
@@ -146,6 +153,7 @@ public class WorkoutLogControllerTest {
                 {
                     "name": "Workout 1",
                     "date": "2025-09-27",
+                    "weight": 140,
                     "userId": "%s"
                 }
                 """.formatted(userId);

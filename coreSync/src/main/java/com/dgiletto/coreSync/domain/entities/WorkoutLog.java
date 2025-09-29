@@ -22,6 +22,9 @@ public class WorkoutLog {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @Column(name = "weight")
+    private Double weight;
+
     // Relationships
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,10 +36,11 @@ public class WorkoutLog {
     public WorkoutLog() {
     }
 
-    public WorkoutLog(UUID id, String name, LocalDate date, User user, List<Exercise> exercises) {
+    public WorkoutLog(UUID id, String name, LocalDate date, Double weight, User user, List<Exercise> exercises) {
         this.id = id;
         this.name = name;
         this.date = date;
+        this.weight = weight;
         this.user = user;
         this.exercises = exercises;
     }
@@ -65,6 +69,14 @@ public class WorkoutLog {
         this.date = date;
     }
 
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
     public User getUser() {
         return user;
     }
@@ -85,16 +97,12 @@ public class WorkoutLog {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         WorkoutLog that = (WorkoutLog) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(exercises, that.exercises);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(date, that.date) && Objects.equals(weight, that.weight) && Objects.equals(user, that.user) && Objects.equals(exercises, that.exercises);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, user, exercises);
+        return Objects.hash(id, name, date, weight, user, exercises);
     }
 
     @Override
@@ -103,6 +111,7 @@ public class WorkoutLog {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", date=" + date +
+                ", weight=" + weight +
                 ", user=" + user +
                 ", exercises=" + exercises +
                 '}';

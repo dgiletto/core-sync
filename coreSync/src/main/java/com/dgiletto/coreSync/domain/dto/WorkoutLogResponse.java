@@ -8,6 +8,7 @@ public record WorkoutLogResponse(
         UUID id,
         String name,
         LocalDate date,
+        Double weight,
         UUID userId
 ) {
 }
