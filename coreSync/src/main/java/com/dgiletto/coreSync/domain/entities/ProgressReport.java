@@ -2,6 +2,7 @@ package com.dgiletto.coreSync.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,25 +15,40 @@ public class ProgressReport {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    private Period period;
-
-    private Double strengthProgress;
-    private Double enduranceProgress;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private Period period;
+
+    @Column(nullable = false)
+    private LocalDate startDate;
+
+    @Column(nullable = false)
+    private LocalDate endDate;
+
+    // Calculated Values
+    private Double avgWeight;
+    private Double bmiChange;
+    private Double enduranceProgress;
+    private Double strengthProgress;
+
     public ProgressReport() {
     }
 
-    public ProgressReport(UUID id, Period period, Double strengthProgress,
-                          Double enduranceProgress, User user) {
+    public ProgressReport(UUID id, User user, Period period,
+                          LocalDate startDate, LocalDate endDate,
+                          Double avgWeight, Double bmiChange,
+                          Double enduranceProgress, Double strengthProgress) {
         this.id = id;
-        this.period = period;
-        this.strengthProgress = strengthProgress;
-        this.enduranceProgress = enduranceProgress;
         this.user = user;
+        this.period = period;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.avgWeight = avgWeight;
+        this.bmiChange = bmiChange;
+        this.enduranceProgress = enduranceProgress;
+        this.strengthProgress = strengthProgress;
     }
 
     public UUID getId() {
@@ -43,6 +59,14 @@ public class ProgressReport {
         this.id = id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Period getPeriod() {
         return period;
     }
@@ -51,12 +75,36 @@ public class ProgressReport {
         this.period = period;
     }
 
-    public Double getStrengthProgress() {
-        return strengthProgress;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStrengthProgress(Double strengthProgress) {
-        this.strengthProgress = strengthProgress;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public Double getAvgWeight() {
+        return avgWeight;
+    }
+
+    public void setAvgWeight(Double avgWeight) {
+        this.avgWeight = avgWeight;
+    }
+
+    public Double getBmiChange() {
+        return bmiChange;
+    }
+
+    public void setBmiChange(Double bmiChange) {
+        this.bmiChange = bmiChange;
     }
 
     public Double getEnduranceProgress() {
@@ -67,12 +115,12 @@ public class ProgressReport {
         this.enduranceProgress = enduranceProgress;
     }
 
-    public User getUser() {
-        return user;
+    public Double getStrengthProgress() {
+        return strengthProgress;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStrengthProgress(Double strengthProgress) {
+        this.strengthProgress = strengthProgress;
     }
 
     @Override
@@ -80,25 +128,34 @@ public class ProgressReport {
         if (o == null || getClass() != o.getClass()) return false;
         ProgressReport that = (ProgressReport) o;
         return Objects.equals(id, that.id) &&
+                Objects.equals(user, that.user) &&
                 period == that.period &&
-                Objects.equals(strengthProgress, that.strengthProgress) &&
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(endDate, that.endDate) &&
+                Objects.equals(avgWeight, that.avgWeight) &&
+                Objects.equals(bmiChange, that.bmiChange) &&
                 Objects.equals(enduranceProgress, that.enduranceProgress) &&
-                Objects.equals(user, that.user);
+                Objects.equals(strengthProgress, that.strengthProgress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, period, strengthProgress, enduranceProgress, user);
+        return Objects.hash(id, user, period, startDate,
+                endDate, avgWeight, bmiChange, enduranceProgress, strengthProgress);
     }
 
     @Override
     public String toString() {
         return "ProgressReport{" +
                 "id=" + id +
-                ", period=" + period +
-                ", strengthProgress=" + strengthProgress +
-                ", enduranceProgress=" + enduranceProgress +
                 ", user=" + user +
+                ", period=" + period +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", avgWeight=" + avgWeight +
+                ", bmiChange=" + bmiChange +
+                ", enduranceProgress=" + enduranceProgress +
+                ", strengthProgress=" + strengthProgress +
                 '}';
     }
 }
