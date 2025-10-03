@@ -13,4 +13,22 @@ API.interceptors.request.use((config) => {
     return config;
 });
 
+// Global 401 handler
+API.interceptors.response.use(
+    (res) => res,
+    (err) => {
+        if (err.response?.status === 401) {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
+        return Promise.reject(err);
+    }
+);
+
+export const AuthAPI = {
+    register: (data: any) => API.post("/auth/register", data),
+    login: (data: { email: string; password: string }) =>
+        API.post("/auth/login", data)
+};
+
 export default API;

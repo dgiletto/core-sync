@@ -12,26 +12,36 @@ import {
 } from "@/components/ui/card";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { toast } from "sonner";
+import { AuthAPI } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const router = useRouter();
+    const [formData, setFormData] = useState({email: "", password: ""});
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email) {
+        if (!formData.email) {
             toast.error("Missing Information", {
                 description: "Please enter your email"
             });
             return;
-        } else if (!password) {
+        } else if (!formData.password) {
             toast.error("Missing Information", {
                 description: "Please enter your password"
             });
             return;
         }
         // TODO: call backend /api/auth/login with fetch or axios
-        console.log({email, password});
+        try {
+            const res = await AuthAPI.login(formData);
+            localStorage.setItem("token", res.data.token);
+            router.push("/dashboard");
+        } catch (error: any) {
+            toast.error("Login failed", {
+                description: error.response?.data || "Invalid Credentials"
+            });
+        }
     };
 
     return (
@@ -58,15 +68,15 @@ export default function LoginPage() {
                             <Input
                                 type="email"
                                 placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={formData.email}
+                                onChange={(e) => setFormData({...formData, email: e.target.value})}
                                 className="h-12 text-lg"
                             />
                             <Input
                                 type="password"
                                 placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={formData.password}
+                                onChange={(e) => setFormData({...formData, password: e.target.value})}
                                 className="h-12 text-lg"
                             />
                             <Button type="submit" className="w-full h-12 text-lg cursor-pointer">

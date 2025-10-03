@@ -23,6 +23,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { toast } from "sonner";
+import { AuthAPI } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 type FitnessLevel = "ADVANCED" | "INTERMEDIATE" | "BEGINNER";
 type GoalOption = "Lose Weight" | "Build Muscle" | "Improve Endurance";
@@ -40,6 +42,7 @@ interface FormData {
 
 
 export default function LoginPage() {
+    const router = useRouter();
     const [flag, setFlag] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormData>({
         name: "",
@@ -63,7 +66,7 @@ export default function LoginPage() {
         setFormData((prev) => ({ ...prev, [name]: value}));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!formData.name || !formData.email || !formData.password) {
@@ -94,8 +97,26 @@ export default function LoginPage() {
             return;
         }
 
-        toast.success("Account Created");
-        console.log("Form Submitted: ", formData);
+        try {
+            await AuthAPI.register({
+                name: formData.name,
+                email: formData.email,
+                passwordHash: formData.password,
+                age: Number(formData.age),
+                weight: Number(formData.weight),
+                height: Number(formData.height),
+                fitnessLevel: formData.fitnessLevel,
+                goals: formData.goals
+            });
+            toast.success("Account Created", {
+                description: "You can now login"
+            });
+            router.push("/login");
+        } catch (error: any) {
+            toast.error("Registration failed", {
+                description: error.response?.data || "Something went wrong"
+            });
+        }
     };
 
     return (

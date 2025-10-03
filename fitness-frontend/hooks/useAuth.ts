@@ -1,26 +1,49 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 
-export function useAuth() {
-    const [user, setUser] = useState<any>(null);
+interface DecodedToken {
+    sub: string;    // email
+    userId: string; // user id
+    exp: number;    // expiry
+}
+
+export function useAuth(redirect = true) {
+    const [user, setUser] = useState<DecodedToken | any>(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            router.push("/login");
+            if (redirect) router.push("/login");
+            setLoading(false);
             return;
         }
+
         try {
-            const decoded : any = jwtDecode(token);
-            setUser(decoded);
+            const decoded = jwtDecode<DecodedToken>(token);
+
+            // Check if token expired
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem("token");
+                if (redirect) router.push("/login");
+            } else {
+                setUser(decoded);
+            }
         } catch {
             localStorage.removeItem("token");
-            router.push("/login");
+            if (redirect) router.push("/login");
         }
-    }, [router]);
+        setLoading(false);
+    }, [router, redirect]);
 
-    return { user };
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        router.push("login");
+    };
+
+    return { user, loading, logout };
 }
