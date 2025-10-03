@@ -14,10 +14,12 @@ import { Spotlight } from "@/components/ui/spotlight-new";
 import { toast } from "sonner";
 import { AuthAPI } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { LoaderTwo } from "@/components/ui/loader";
 
 export default function LoginPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({email: "", password: ""});
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,7 +34,8 @@ export default function LoginPage() {
             });
             return;
         }
-        // TODO: call backend /api/auth/login with fetch or axios
+        
+        setLoading(true);
         try {
             const res = await AuthAPI.login(formData);
             localStorage.setItem("token", res.data.token);
@@ -41,6 +44,8 @@ export default function LoginPage() {
             toast.error("Login failed", {
                 description: error.response?.data || "Invalid Credentials"
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -79,8 +84,8 @@ export default function LoginPage() {
                                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                                 className="h-12 text-lg"
                             />
-                            <Button type="submit" className="w-full h-12 text-lg cursor-pointer">
-                                Login
+                            <Button type="submit" className="w-full h-12 text-lg cursor-pointer" disabled={loading}>
+                                {loading ? <LoaderTwo /> : "Login"}
                             </Button>
                         </form>
                         <div className="mt-6 text-center text-base text-muted-foreground">

@@ -25,6 +25,7 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { toast } from "sonner";
 import { AuthAPI } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { LoaderTwo } from "@/components/ui/loader";
 
 type FitnessLevel = "ADVANCED" | "INTERMEDIATE" | "BEGINNER";
 type GoalOption = "Lose Weight" | "Build Muscle" | "Improve Endurance";
@@ -54,6 +55,7 @@ export default function LoginPage() {
         fitnessLevel: "",
         goals: []
     });
+    const [loading, setLoading] = useState(false);
 
     const fitnessLevels: FitnessLevel[] = ["ADVANCED", "INTERMEDIATE", "BEGINNER"];
     const goalsList: GoalOption[] = ["Lose Weight", "Build Muscle", "Improve Endurance"]
@@ -97,6 +99,7 @@ export default function LoginPage() {
             return;
         }
 
+        setLoading(true);
         try {
             await AuthAPI.register({
                 name: formData.name,
@@ -116,6 +119,8 @@ export default function LoginPage() {
             toast.error("Registration failed", {
                 description: error.response?.data || "Something went wrong"
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -252,8 +257,8 @@ export default function LoginPage() {
                                     </div>
 
                                     {/* Create Account Button */}
-                                    <Button type="submit" className="w-full h-12 text-lg cursor-pointer">
-                                        Create Account
+                                    <Button type="submit" className="w-full h-12 text-lg cursor-pointer" disabled={loading}>
+                                        {loading ? <LoaderTwo /> : "Create Account"}
                                     </Button>
                                 </div>
                             )}
