@@ -3,6 +3,7 @@ package com.dgiletto.coreSync.config;
 import com.dgiletto.coreSync.domain.entities.User;
 import com.dgiletto.coreSync.repositories.UserRepository;
 import com.dgiletto.coreSync.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,14 +35,25 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            String email = jwtUtil.extractEmail(token);
-            User user = userRepository.findByEmail(email).orElse(null);
+            try {
+                String email = jwtUtil.extractEmail(token);
 
-            if (user != null) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(user, null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (email != null && jwtUtil.isTokenValid(token, email)) {
+                    User user = userRepository.findByEmail(email).orElse(null);
+
+                    if (user != null) {
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(user, null,
+                                        List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+            } catch (JwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
         filterChain.doFilter(request, response);

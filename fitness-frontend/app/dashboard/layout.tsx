@@ -1,9 +1,10 @@
 import { SidebarDemo } from "@/components/Sidebar";
-import { useAuth } from "@/hooks/useAuth";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import "../globals.css";
+import GridBackground from "@/components/GridBackground";
+import { AuthProvider } from "@/hooks/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,21 +19,22 @@ const geistMono = Geist_Mono({
 export default function DashboardLayout({ children }: { children: React.ReactNode}) {
 
     return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Toaster position="top-right" richColors/>
-        <div
-            className={cn(
-                "mx-auto flex w-full flex-1 flex-col overflow-hidden md:flex-row bg-background",
-                "h-screen"
-            )}
-        >
-            <SidebarDemo />
-            {children}
-        </div>
-      </body>
-    </html>
+      <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AuthProvider>
+          <Toaster position="top-right" richColors />
+          <div className="relative min-h-screen w-full overflow-hidden bg-transparent text-white">
+            {/* Grid Background */}
+            <GridBackground />
+
+            {/* Foreground content */}
+            <div className="relative z-10 flex min-h-screen">
+              <SidebarDemo />
+              <main className="flex-1 p-8 overflow-y-auto">
+                  {children}
+              </main>
+            </div>
+          </div>
+        </AuthProvider>
+      </div>
   );
 }
