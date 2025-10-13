@@ -40,7 +40,7 @@ export default function DashboardPage() {
             <div className="flex justify-center items-center gap-5">
                 <Card className="w-lg">
                     <CardHeader>
-                        <CardTitle>Today's Motivation 💪</CardTitle>
+                        <CardTitle>Today's Quote 💪</CardTitle>
                     </CardHeader>
                     <CardContent>
                         {quote ? (
@@ -62,7 +62,7 @@ export default function DashboardPage() {
             <div className="flex justify-center items-center gap-2 mt-4">
                 <Button variant="outline" className="rounded-full px-6 py-3 cursor-pointer">
                     <Dumbbell className="h-5 w-5 shrink-0 text-blue-700" />
-                    <Link href="/dashboard/workout">Workout</Link>
+                    <Link href="/dashboard/workout">Workouts</Link>
                 </Button>
                 <Button variant="outline" className="rounded-full px-6 py-3 cursor-pointer">
                     <Brain className="h-5 w-5 shrink-0 text-pink-400" />

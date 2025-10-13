@@ -3,14 +3,16 @@ package com.dgiletto.coreSync.services.impl;
 import com.dgiletto.coreSync.domain.dto.WorkoutLogRequest;
 import com.dgiletto.coreSync.domain.dto.WorkoutLogResponse;
 import com.dgiletto.coreSync.domain.entities.WorkoutLog;
-import com.dgiletto.coreSync.mappers.ExerciseMapper;
 import com.dgiletto.coreSync.mappers.WorkoutLogMapper;
 import com.dgiletto.coreSync.repositories.UserRepository;
 import com.dgiletto.coreSync.repositories.WorkoutRepository;
 import com.dgiletto.coreSync.services.WorkoutLogService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -47,11 +49,20 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
     }
 
     @Override
-    public List<WorkoutLogResponse> getWorkoutsByUser(UUID userId) {
-        List<WorkoutLog> logs = workoutRepository.findByUserId(userId);
-        return logs.stream()
+    public Page<WorkoutLogResponse> getWorkoutsByUser(UUID userId, Pageable pageable) {
+        Page<WorkoutLog> workoutsPage = workoutRepository.findAllByUserId(userId, pageable);
+
+        // Convert to response
+        List<WorkoutLogResponse> workoutLogResponses = workoutsPage.getContent()
+                .stream()
                 .map(workoutLogMapper::toResponse)
                 .toList();
+
+        return new PageImpl<>(
+                workoutLogResponses,
+                pageable,
+                workoutsPage.getTotalElements()
+        );
     }
 
     @Override

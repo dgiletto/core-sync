@@ -54,7 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
                 // Adds JWT + handles 401
                 const res = await API.get(`/users/${decoded.userId}`);
-                setUser(res.data);
+                const userData = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
+                setUser(userData);
             } catch (error) {
                 console.error("Error fetching user: ", error);
                 localStorage.removeItem("token");

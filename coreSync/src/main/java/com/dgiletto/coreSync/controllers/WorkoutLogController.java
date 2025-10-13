@@ -3,6 +3,10 @@ package com.dgiletto.coreSync.controllers;
 import com.dgiletto.coreSync.domain.dto.WorkoutLogRequest;
 import com.dgiletto.coreSync.domain.dto.WorkoutLogResponse;
 import com.dgiletto.coreSync.services.WorkoutLogService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +32,13 @@ public class WorkoutLogController {
 
     // GET /api/workout/{user_id}
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<WorkoutLogResponse>> getWorkoutsByUser(@PathVariable("user_id") UUID userId) {
-        List<WorkoutLogResponse> workouts = workoutLogService.getWorkoutsByUser(userId);
-        return ResponseEntity.ok(workouts);
+    public Page<WorkoutLogResponse> getWorkoutLogs(
+            @PathVariable("user_id") UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("Date").descending());
+        return workoutLogService.getWorkoutsByUser(userId, pageable);
     }
 
     // GET /api/workout/{user_id}/{workout_log_id}
