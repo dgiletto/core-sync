@@ -63,6 +63,16 @@ export default function WorkoutCarousel() {
         fetchWorkouts(0, true);
     };
 
+    const handleDelete = (id: string) => {
+        setWorkouts((prev) => prev.filter((w) => w.id !== id));
+    };
+
+    const handleEdit = (updatedWorkout: Workout) => {
+        setWorkouts((prev) => 
+            prev.map((w) => (w.id === updatedWorkout.id ? updatedWorkout : w))
+        );
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen text-gray-400">
@@ -87,7 +97,7 @@ export default function WorkoutCarousel() {
                     <>
                         <div className="w-full flex flex-col items-center space-y-4">
                             {workouts.map((workout) => (
-                                <WorkoutCard key={workout.id} workout={workout} />
+                                <WorkoutCard key={workout.id} workout={workout} onDelete={handleDelete} onUpdate={handleEdit} />
                             ))}
                         </div>
 
