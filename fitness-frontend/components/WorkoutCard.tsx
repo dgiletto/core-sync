@@ -88,11 +88,13 @@ export function WorkoutCard({ workout, onDelete, onUpdate }: WorkoutCardProps) {
         <Card className="w-[60vw] max-x-lg mx-auto mb-6 bg-card">
             <CardHeader>
                 <CardTitle 
-                    onClick={handleOpenWorkout}
                     className="text-xl font-semibold text-white flex justify-between items-center cursor-pointer"
                 >
                     {/* Workout Link */}
-                    <p className="flex gap-3 items-center">
+                    <p 
+                        className="flex gap-3 items-center"
+                        onClick={handleOpenWorkout}
+                    >
                         <BicepsFlexed />{" "}
                         {isEditing ? (
                             <Input
