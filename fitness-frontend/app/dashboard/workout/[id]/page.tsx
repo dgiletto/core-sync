@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 import { LoaderTwo } from "@/components/ui/loader";
 import { Badge } from "@/components/ui/badge";
 import API from "@/lib/api";
-import { Dumbbell, Clock, SquarePen, Trash } from "lucide-react";
+import { Dumbbell, Clock } from "lucide-react";
 import NewExerciseModal from "@/components/NewExerciseModal";
 import ExerciseCard from "@/components/ExerciseCard";
 
@@ -111,6 +111,16 @@ export default function WorkoutDetailPage() {
         }
     }
 
+    const handleDelete = (id: string) => {
+        setExercises((prev) => prev.filter((e) => e.id !== id))
+    }
+
+    const handleEdit = (updatedExercise: Exercise) => {
+        setExercises((prev) => 
+            prev.map((e) => (e.id === updatedExercise.id ? updatedExercise : e))
+        );
+    }
+
     useEffect(() => {
         if (!id || !userId) return;
 
@@ -198,7 +208,14 @@ export default function WorkoutDetailPage() {
 
             <div className="w-[90vw] grid grid-cols-2 gap-3 overflow-y-auto no-scrollbar scroll-smooth max-h-[64vh]">
                 {exercises.map((exercise, index) => (
-                    <ExerciseCard key={exercise.id} exercise={exercise} index={index} />
+                    <ExerciseCard 
+                        key={exercise.id} 
+                        exercise={exercise} 
+                        index={index} 
+                        workoutId={id as string}
+                        onDelete={handleDelete}
+                        onUpdate={handleEdit}
+                    />
                 ))}
             </div>
         </div>

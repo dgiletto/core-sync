@@ -46,7 +46,7 @@ export function WorkoutCard({ workout, onDelete, onUpdate }: WorkoutCardProps) {
             await API.delete(`/workout/${workout.userId}/${workout.id}`);
             onDelete(workout.id);
             toast.success("Workout Deleted", {
-                description: "Workout deleted successfully"
+                description: "Workout successfully deleted"
             });
         } catch (error) {
             console.error("Failed to delete workout: ", error);

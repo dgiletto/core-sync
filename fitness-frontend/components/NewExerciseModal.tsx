@@ -1,6 +1,6 @@
 "use client";
 import API from "@/lib/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "./ui/dialog";
 import { Button } from "./ui/button";
@@ -31,14 +31,15 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
         distance: "",
     });
 
-    const handleCreate = async () => {
-        setIsLoading(true);
+    const handleSubmit = async () => {
         if (Number(newExercise.weight) < 0 || Number(newExercise.sets) < 0 || Number(newExercise.reps) < 0) {
-            toast.error("Error Adding Exercise", {
+            toast.error("Error Submitting Exercise", {
                 description: "You can not enter negative numbers"
             });
             return;
         }
+
+        setIsLoading(true);
         try {
             const payload = {
                 ...newExercise,
@@ -51,11 +52,11 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
 
             await API.post(`/exercise/${workoutId}`, payload);
 
+            onExerciseCreated?.();
             toast.success("Exercise Added", {
-                description: "Your exercise was successfully added!"
+                description: "Your exercise was successfully added"
             });
 
-            onExerciseCreated();
             setIsDialogOpen(false);
             setNewExercise({
                 name: "",
@@ -70,9 +71,7 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
             });
         } catch (error) {
             console.error("Error adding exercise:", error);
-            toast.error("Failed to Add", {
-                description: "Could not add exercise. Please try again.",
-            });
+            toast.error("Failed to add exercise");
         } finally {
             setIsLoading(true);
         }
@@ -80,19 +79,16 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-                <Button className="w-full mb-3">
-                    <Plus className="w-5 h-5 mr-2" />
-                    Add Exercise
-                </Button>
-            </DialogTrigger>
+                <DialogTrigger asChild>
+                    <Button className="w-full mb-3">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Add Exercise
+                    </Button>
+                </DialogTrigger>
 
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-2xl">Add New Exercise</DialogTitle>
-                    <DialogDescription className="text-gray-400">
-                        Fill in details for yout new exercise
-                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4 py-4">
@@ -126,7 +122,7 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="exerciseType">Difficulty</Label>
+                            <Label htmlFor="difficulty">Difficulty</Label>
                             <Select
                                 value={newExercise.difficulty}
                                 onValueChange={(value) => setNewExercise({...newExercise, difficulty: value})}
@@ -225,7 +221,7 @@ export default function NewExerciseModal({ workoutId, onExerciseCreated }: NewEx
                         Cancel
                     </Button>
                     <Button
-                        onClick={handleCreate}
+                        onClick={handleSubmit}
                         disabled={!newExercise.name || isLoading}
                     >
                         {isLoading ? <LoaderTwo /> : "Add Exercise"}
