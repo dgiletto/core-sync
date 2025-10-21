@@ -14,6 +14,11 @@ interface User {
     id: string;
     name: string;
     email: string;
+    age: number;
+    weight: number;
+    height: number;
+    fitnessLevel?: string;
+    goals?: string[];
 }
 
 interface AuthContextType {

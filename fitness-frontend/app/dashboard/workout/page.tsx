@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import WorkoutCarousel from "@/components/WorkoutCarousel";
 import React from "react";
-import { Plus } from "lucide-react";
 
 export default function WorkoutPage() {
     return (
