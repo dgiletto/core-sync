@@ -40,6 +40,7 @@ export async function POST(req: Request) {
                                 {
                                     "name": "Exercise name",
                                     "description": "Brief description explaining the workout"
+                                    "instruction": "Instructions on how to do the exercise"
                                     "type": "STRENGTH" | "CARDIO",
                                     "muscleGroup": "Chest", "Back", etc.
                                     "sets": 3
