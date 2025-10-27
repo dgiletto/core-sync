@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://localhost:8080/api"
+    baseURL: "http://coresync-env.eba-cus37khe.us-east-2.elasticbeanstalk.com/api"
 });
 
 // Add JWT auth header
