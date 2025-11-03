@@ -30,7 +30,9 @@ export async function POST(req: Request) {
                 - Fitness Experience Level: ${fitnessLevel}
                 - Goals: ${goals.join(", ")}
             
-                Return ONLY valid JSON in the following format:
+                Return ONLY a valid valid JSON object, nothing else.
+                DO NOT include explanations, commentary, or extra text.
+                The JSON must follow the exact structure:
                 {
                     workouts: [
                         {
@@ -57,11 +59,15 @@ export async function POST(req: Request) {
             model: "openai/gpt-oss-20b:free",
             temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
-            response_format: { type: "json_object" },
         });
 
-        const message = JSON.parse(completion.choices[0].message.content || "[]");
+        const raw = completion.choices[0]?.message?.content || "";
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error("Model did not return valid JSON");
 
+        const message = JSON.parse(jsonMatch[0]);
+
+        // Cache for 1 day
         await redis.set(CACHE_KEY, JSON.stringify(message), { ex: ONE_DAY_SECONDS });
 
         return NextResponse.json(message);
